@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 04</title>
+</head>
+<body>
+    <h1>Recuperación de un texto mediante Ajax</h1>
+    <input type="button" value="Pulsa para mostrar el texto recuperado en el div inferior" onclick="recuperaTexto();">
+    <div id="zona_recuperacion">
+        <!--Aquí dentro crearemos desde js un párrafo con el texto recuperado introducido con innerHTML-->
+    </div>
+    <script>
+        /*En este tutorial recuperamos el contenido de un documento txt y lo mostramos en nuestra página sin refrescar al pulsar un botón*/
+        function recuperaTexto(){
+            const xhttp = new XMLHttpRequest(); //Creamos el objeto ajax
+            xhttp.onreadystatechange = function(){//Cuando ese objeto cambie de estado, haremos lo que introduzcamos en esta función anónima
+                //Como el cambio no tiene por qué ser a nuestro favor, debemos comprobar que recuperamos un 4 y un 200
+                if(this.readyState == 4 && this.status ==200){ //Si la conexión ha sido un éxito...
+                    document.getElementById("zona_recuperacion").innerHTML=this.responseText;//Insertamos los valores recuperados (Una página de php con html) en el interior de este div
+                }else{//Si hemos fallado en la conexión y recuperación de esa información
+                    document.getElementById("zona_de_recuperacion").innerHTML="<p>Ha habido un error, esperábamos respuesta 4-200 y hemos recibido "+this.readyState+" - "+this.status+"</p>";
+                }
+            };
+            xhttp.open("GET", "http://localhost/ajax/tutorial/ajax04_ficheroPHPconHTML.php", true); //Recibe el método (post o get), la url del fichero a recuperar y true o false a la pregunta de si queremos que sea asínscrono. Si no es asíncrono no es AJAX
+            xhttp.send(null);
+        }
+    </script>
+</body>
+</html>

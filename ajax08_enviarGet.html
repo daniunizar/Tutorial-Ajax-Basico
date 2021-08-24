@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 08</title>
+</head>
+<body>
+    <h1>Recuperación de un texto mediante Ajax</h1>
+    <input type="button" value="Pulsa para enviar nuestros datos y recuperar el saludo completo" onclick="recuperaTexto();">
+    <div id="zona_de_recuperacion">
+        <!--Aquí dentro crearemos desde js un párrafo con el texto recuperado introducido con innerHTML-->
+    </div>
+    <script>
+        /*En este tutorial enviaremos un nombre y un apellido a un php, que hará un saludo con ellos y recuperaremos ese saludo para mostrarlo en la zona de recuperación*/
+        function recuperaTexto(){
+            var nombre = "Harry"; //la podríamos recuperar de un campo de formulario, por ejemplo, o de un campo oculto.
+            var apellido = "Potter";
+            var url = "http://localhost/ajax/tutorial/ajax08_php_get.php?nombre="+nombre+"&apellido="+apellido;
+            const xhttp = new XMLHttpRequest(); //Creamos el objeto ajax
+            xhttp.onreadystatechange = function(){//Cuando ese objeto cambie de estado, haremos lo que introduzcamos en esta función anónima
+                //Como el cambio no tiene por qué ser a nuestro favor, debemos comprobar que recuperamos un 4 y un 200
+                if(this.readyState == 4 && this.status ==200){ //Si la conexión ha sido un éxito...
+                    document.getElementById("zona_de_recuperacion").innerHTML="<p>"+this.responseText+"</p>";//Insertamos los valores recuperados (Una echo de php) en el interior de este div y a su vez en un párrafo
+                }else{//Si hemos fallado en la conexión y recuperación de esa información
+                    document.getElementById("zona_de_recuperacion").innerHTML="<p>Ha habido un error, esperábamos respuesta 4-200 y hemos recibido "+this.readyState+" - "+this.status+"</p>";
+                }
+            };
+            xhttp.open("GET", url, true); //Recibe el método (post o get), la url del fichero a recuperar y true o false a la pregunta de si queremos que sea asínscrono. Si no es asíncrono no es AJAX
+            xhttp.send(null);
+        }
+    </script>
+</body>
+</html>
